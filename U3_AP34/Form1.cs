@@ -75,6 +75,8 @@ namespace U3_AP34
         List<datosQs> entrada;
         String qs = ""; String[] q0 = null; String[] q1 = null;
 
+        List<String> Qs = new List<string>();
+
         List<datosQs> auxEntrada;
         private void recogerEntrada()
         {
@@ -88,33 +90,28 @@ namespace U3_AP34
             }
         }
 
-        private void recogerSalida()
-        {
-            auxEntrada = new List<datosQs>();
-            for (int i = 0; i < dgvSalida.Rows.Count - 1; i++)
-            {
-                qs = dgvEntrada.Rows[i].Cells[1].Value.ToString();
-                q0 = dgvEntrada.Rows[i].Cells[2].Value.ToString().Split(',');
-                q1 = dgvEntrada.Rows[i].Cells[3].Value.ToString().Split(',');
-                auxEntrada.Add(new datosQs(qs, q0, q1));
-            }
-        }
-
-        private String concatenacion(String[] qt)
-        {
-            String resultado = "";
-            for (int i=0; i<qt.Length; i++)
-            {
-                resultado = resultado + ","+qt[i];
-            }
-            return resultado;
-        }
-
         private void procesarEntrada()
         {
+            String resultado = "";
             dgvSalida.Rows.Add("q" + dgvSalida.Rows.Count, dgvEntrada.Rows[0].Cells[0].Value.ToString(), dgvEntrada.Rows[0].Cells[1].Value.ToString(), dgvEntrada.Rows[0].Cells[2].Value.ToString());
-            recogerSalida();
-
+            Qs.Add(dgvSalida.Rows[0].Cells[2].Value.ToString()); // aqui agrego el primer destino0 correspondiente al primer registro
+            Qs.Add(dgvSalida.Rows[0].Cells[3].Value.ToString());// aqui agrego el segundo destino0 correspondiente al primer registro
+            
+            foreach (String e in Qs) // se recorren los dos 
+            {
+                String[] auxE = e.Split(','); // se parte para revisar en la tabla de entrada
+                for (int i = 0; i < auxE.Length; i++) 
+                {
+                    for (int j = 0; j < dgvEntrada.Rows.Count - 1; j++) 
+                    {
+                        if (auxE[i].Equals(dgvEntrada.Rows[j].Cells[0].Value.ToString())) // si coincide al agregado recientemente con el encontrado en la tabla
+                            resultado = resultado +"," + dgvEntrada.Rows[j].Cells[1].Value.ToString();
+                    }
+                }
+            }
+            resultado.TrimStart(',');
+            resultado.TrimEnd(',');
+            dgvSalida.Rows.Add("q" + dgvSalida.Rows.Count, Qs[0], resultado);
         }
     }
 }
