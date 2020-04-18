@@ -77,7 +77,7 @@ namespace U3_AP34
             String resultado = "";
             String[] auxE = f.Split(','); // se parte para revisar en la tabla de entrada
             for (int i = 0; i < auxE.Length; i++)
-                {
+            {
                 for (int j = 0; j < dgvEntrada.Rows.Count - 1; j++)
                 {
                     if (auxE[i].Equals(dgvEntrada.Rows[j].Cells[0].Value.ToString())) // si coincide al agregado recientemente con el encontrado en la tabla
@@ -118,31 +118,15 @@ namespace U3_AP34
 
             int contador = 5;
             dgvSalida.Rows.Add("q" + dgvSalida.Rows.Count, dgvEntrada.Rows[0].Cells[0].Value.ToString(), dgvEntrada.Rows[0].Cells[1].Value.ToString(), dgvEntrada.Rows[0].Cells[2].Value.ToString());
-            //Qs.Add(dgvSalida.Rows[0].Cells[2].Value.ToString()); // aqui agrego el primer destino0 correspondiente al primer registro
-            //Qs.Add(dgvSalida.Rows[0].Cells[3].Value.ToString());// aqui agrego el segundo destino0 correspondiente al primer registro
+
             Qs = new List<string>();
             recogerSalida();
 
             foreach (String e in Qs)
             {
-                dgvSalida.Rows.Add("q" + dgvSalida.Rows.Count, e, buscar0s(e), buscar1s(e)); 
+                dgvSalida.Rows.Add("q" + dgvSalida.Rows.Count, e, buscar0s(e), buscar1s(e));
             }
 
-            /*foreach (String e in Qs) // se recorren los dos 
-            {
-                String[] auxE = e.Split(','); // se parte para revisar en la tabla de entrada
-                for (int i = 0; i < auxE.Length; i++) /
-                {
-                    for (int j = 0; j < dgvEntrada.Rows.Count - 1; j++) 
-                    {
-                        if (auxE[i].Equals(dgvEntrada.Rows[j].Cells[0].Value.ToString())) // si coincide al agregado recientemente con el encontrado en la tabla
-                            resultado = resultado +"," + dgvEntrada.Rows[j].Cells[1].Value.ToString();
-                    }
-                }
-            }
-            resultado.TrimStart(',');
-            resultado.TrimEnd(',');
-            dgvSalida.Rows.Add("q" + dgvSalida.Rows.Count, Qs[0], resultado, resultado2);*/
         }
     }
 }
