@@ -77,7 +77,7 @@ namespace U3_AP34
             String resultado = "";
             String[] auxE = f.Split(','); // se parte para revisar en la tabla de entrada
             for (int i = 0; i < auxE.Length; i++)
-            {
+                {
                 for (int j = 0; j < dgvEntrada.Rows.Count - 1; j++)
                 {
                     if (auxE[i].Equals(dgvEntrada.Rows[j].Cells[0].Value.ToString())) // si coincide al agregado recientemente con el encontrado en la tabla
@@ -111,22 +111,37 @@ namespace U3_AP34
             }
         }
 
-
+        private bool buscarExitenciaEnSalida(String f)
+        {
+            bool resultado = false;
+            for (int i = 0; i < dgvSalida.Rows.Count; i++)
+            {
+                if (dgvSalida.Rows[i].Cells[1].Value.ToString().Equals(f))
+                {
+                    resultado = true;
+                    break;
+                }
+            }
+            return resultado;
+        }
 
         private void procesarEntrada()
         {
 
             int contador = 5;
             dgvSalida.Rows.Add("q" + dgvSalida.Rows.Count, dgvEntrada.Rows[0].Cells[0].Value.ToString(), dgvEntrada.Rows[0].Cells[1].Value.ToString(), dgvEntrada.Rows[0].Cells[2].Value.ToString());
-
-            Qs = new List<string>();
-            recogerSalida();
-
-            foreach (String e in Qs)
+            do
             {
-                dgvSalida.Rows.Add("q" + dgvSalida.Rows.Count, e, buscar0s(e), buscar1s(e));
-            }
-
+                Qs = new List<string>();
+                recogerSalida();
+                
+                foreach (String e in Qs)
+                {
+                    if (buscarExitenciaEnSalida(e) ==false)
+                        dgvSalida.Rows.Add("q" + dgvSalida.Rows.Count, e, buscar0s(e), buscar1s(e));
+                }
+                contador--;
+            } while (contador > 0);
         }
     }
 }
