@@ -50,7 +50,6 @@ namespace U3_AP34
         private void pictureBox3_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Convirtiendo...");
-            recogerEntrada();
             procesarEntrada();
         }
 
@@ -71,36 +70,68 @@ namespace U3_AP34
         }
 
         /*ZONA DE PROCESAMIENTO*/
-
-        List<datosQs> entrada;
-        String qs = ""; String[] q0 = null; String[] q1 = null;
-
         List<String> Qs = new List<string>();
 
-        List<datosQs> auxEntrada;
-        private void recogerEntrada()
+        private String buscar0s(String f)
         {
-            entrada = new List<datosQs>();
-            for (int i = 0; i < dgvEntrada.Rows.Count - 1; i++)
+            String resultado = "";
+            String[] auxE = f.Split(','); // se parte para revisar en la tabla de entrada
+            for (int i = 0; i < auxE.Length; i++)
+                {
+                for (int j = 0; j < dgvEntrada.Rows.Count - 1; j++)
+                {
+                    if (auxE[i].Equals(dgvEntrada.Rows[j].Cells[0].Value.ToString())) // si coincide al agregado recientemente con el encontrado en la tabla
+                        resultado = resultado + "," + dgvEntrada.Rows[j].Cells[1].Value.ToString();
+                }
+            }
+            return resultado.TrimStart(',');
+        }
+
+        private String buscar1s(String f)
+        {
+            String resultado = "";
+            String[] auxE = f.Split(','); // se parte para revisar en la tabla de entrada
+            for (int i = 0; i < auxE.Length; i++)
             {
-                qs = dgvEntrada.Rows[i].Cells[0].Value.ToString();
-                q0 = dgvEntrada.Rows[i].Cells[1].Value.ToString().Split(',');
-                q1 = dgvEntrada.Rows[i].Cells[2].Value.ToString().Split(',');
-                entrada.Add(new datosQs(qs, q0, q1));
+                for (int j = 0; j < dgvEntrada.Rows.Count - 1; j++)
+                {
+                    if (auxE[i].Equals(dgvEntrada.Rows[j].Cells[0].Value.ToString())) // si coincide al agregado recientemente con el encontrado en la tabla
+                        resultado = resultado + "," + dgvEntrada.Rows[j].Cells[2].Value.ToString();
+                }
+            }
+            return resultado.TrimStart(',');
+        }
+
+        private void recogerSalida()
+        {
+            for (int i = 0; i < dgvSalida.Rows.Count; i++)
+            {
+                Qs.Add(dgvSalida.Rows[i].Cells[2].Value.ToString());
+                Qs.Add(dgvSalida.Rows[i].Cells[3].Value.ToString());
             }
         }
 
+
+
         private void procesarEntrada()
         {
-            String resultado = "";
+
+            int contador = 5;
             dgvSalida.Rows.Add("q" + dgvSalida.Rows.Count, dgvEntrada.Rows[0].Cells[0].Value.ToString(), dgvEntrada.Rows[0].Cells[1].Value.ToString(), dgvEntrada.Rows[0].Cells[2].Value.ToString());
-            Qs.Add(dgvSalida.Rows[0].Cells[2].Value.ToString()); // aqui agrego el primer destino0 correspondiente al primer registro
-            Qs.Add(dgvSalida.Rows[0].Cells[3].Value.ToString());// aqui agrego el segundo destino0 correspondiente al primer registro
-            
-            foreach (String e in Qs) // se recorren los dos 
+            //Qs.Add(dgvSalida.Rows[0].Cells[2].Value.ToString()); // aqui agrego el primer destino0 correspondiente al primer registro
+            //Qs.Add(dgvSalida.Rows[0].Cells[3].Value.ToString());// aqui agrego el segundo destino0 correspondiente al primer registro
+            Qs = new List<string>();
+            recogerSalida();
+
+            foreach (String e in Qs)
+            {
+                dgvSalida.Rows.Add("q" + dgvSalida.Rows.Count, e, buscar0s(e), buscar1s(e)); 
+            }
+
+            /*foreach (String e in Qs) // se recorren los dos 
             {
                 String[] auxE = e.Split(','); // se parte para revisar en la tabla de entrada
-                for (int i = 0; i < auxE.Length; i++) 
+                for (int i = 0; i < auxE.Length; i++) /
                 {
                     for (int j = 0; j < dgvEntrada.Rows.Count - 1; j++) 
                     {
@@ -111,20 +142,8 @@ namespace U3_AP34
             }
             resultado.TrimStart(',');
             resultado.TrimEnd(',');
-            dgvSalida.Rows.Add("q" + dgvSalida.Rows.Count, Qs[0], resultado);
+            dgvSalida.Rows.Add("q" + dgvSalida.Rows.Count, Qs[0], resultado, resultado2);*/
         }
     }
 }
 
-public class datosQs
-{
-    public String q  { get; set; }
-    public String[] c0 { get; set; }
-    public String[] c1 { get; set; }
-    public datosQs(String q, String[] c0, String[] c1)
-    {
-        this.q = q;
-        this.c0 = c0;
-        this.c1 = c1;
-    }
-}
