@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -77,9 +77,9 @@ namespace U3_AP34
         {
             String resultado = e;
             if (e.StartsWith(","))
-                resultado = resultado.Substring(1, e.Length - 1);
+                resultado = resultado.Substring(1, e.Length-1);
             if (e.EndsWith(","))
-                resultado = resultado.Substring(0, e.Length - 2);//a,b,c,
+                resultado = resultado.Substring(0, e.Length -2);//a,b,c,
             return resultado;
         }
 
@@ -99,7 +99,7 @@ namespace U3_AP34
         {
             String resultado = "";
             String[] auxE = f.Split(','); // se parte para revisar en la tabla de entrada
-
+            
             for (int i = 0; i < auxE.Length; i++)
             {
                 for (int j = 0; j < dgvEntrada.Rows.Count - 1; j++)
@@ -115,7 +115,7 @@ namespace U3_AP34
         {
             String resultado = "";
             String[] auxE = f.Split(','); // se parte para revisar en la tabla de entrada
-
+            
             for (int i = 0; i < auxE.Length; i++)
             {
                 for (int j = 0; j < dgvEntrada.Rows.Count - 1; j++)
@@ -124,7 +124,7 @@ namespace U3_AP34
                         resultado = resultado + "," + dgvEntrada.Rows[j].Cells[2].Value.ToString();
                 }
             }
-            return eliminarRepetidos(resultado.Replace(",", "").ToCharArray());
+            return eliminarRepetidos(resultado.Replace(",","").ToCharArray());
         }
 
         private void recogerSalida()
@@ -141,7 +141,7 @@ namespace U3_AP34
             bool resultado = false;
             for (int i = 0; i < dgvSalida.Rows.Count; i++)
             {
-                if (dgvSalida.Rows[i].Cells[1].Value.ToString().Replace(",", "").Replace(",,", "").Equals(f.Replace(",", "").Replace(",,", ",")))
+                if (dgvSalida.Rows[i].Cells[1].Value.ToString().Replace(",","").Replace(",,","").Equals(f.Replace(",","").Replace(",,",",")))
                 {
                     resultado = true;
                     break;
@@ -165,14 +165,14 @@ namespace U3_AP34
                     {
                         if (e.Equals("-") || e.Equals(""))
                         {
-
+                            
                         }
                         else
                         {
                             dgvSalida.Rows.Add(
-                                "q" + dgvSalida.Rows.Count,
-                                e.TrimEnd(',').TrimStart(',').Replace(",,", ","),
-                                buscar0s(e.TrimEnd(',').TrimStart(',')).Replace("-", ""),
+                                "q" + dgvSalida.Rows.Count, 
+                                e.TrimEnd(',').TrimStart(',').Replace(",,",","), 
+                                buscar0s(e.TrimEnd(',').TrimStart(',')).Replace("-", ""), 
                                 buscar1s(e.TrimEnd(',').TrimStart(',')).Replace("-", "")
                                 );
                         }
