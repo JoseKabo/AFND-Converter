@@ -163,7 +163,7 @@ namespace U3_AP34
                         else
                         {
               
-                            dgvSalida.Rows.Add("q" + dgvSalida.Rows.Count, e, buscar0s(e.TrimEnd(',').TrimStart(',').Replace(",,", ",")).Replace("-", ""), buscar1s(e.TrimEnd(',').TrimStart(',')).Replace("-", "").Replace(",,", ","));
+                            dgvSalida.Rows.Add("q" + dgvSalida.Rows.Count, e, buscar0s(formatearDatos(e)), buscar1s(formatearDatos(e)));
                         }
 
 
@@ -177,6 +177,26 @@ namespace U3_AP34
             } while (contador > 0);
 
             //formatearSalida();
+        }
+
+        private String formatearDatos(String e)
+        {
+            String resultado = "";
+            if (e.EndsWith(","))
+            {
+                resultado = e.Remove(0, e.Length - 1);
+                MessageBox.Show(resultado);
+            }
+            else
+            {
+                if (e.StartsWith(","))
+                {
+                    resultado = e.Remove(0,1);
+                }
+            }
+            return resultado;
+            
+
         }
 
         /*Metodos nuevos para estados finales*/
