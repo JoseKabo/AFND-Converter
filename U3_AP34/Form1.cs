@@ -75,9 +75,9 @@ namespace U3_AP34
 
         private String eliminarRepetidos(Char[] e)
         {
-            string nuevo = new String(e.Distinct().ToArray()).Replace(",","");
+            string nuevo = new String(e.Distinct().ToArray()).Replace(",", "");
             String resultado = "";
-            for (int i=0; i < nuevo.Length; i++)
+            for (int i = 0; i < nuevo.Length; i++)
             {
                 resultado = resultado + "," + nuevo[i];
             }
@@ -91,7 +91,7 @@ namespace U3_AP34
             String resultado = "";
             String[] auxE = f.Split(','); // se parte para revisar en la tabla de entrada
             for (int i = 0; i < auxE.Length; i++)
-                {
+            {
                 for (int j = 0; j < dgvEntrada.Rows.Count - 1; j++)
                 {
                     if (auxE[i].Equals(dgvEntrada.Rows[j].Cells[0].Value.ToString())) // si coincide al agregado recientemente con el encontrado en la tabla
@@ -151,12 +151,28 @@ namespace U3_AP34
             {
                 Qs = new List<string>();
                 recogerSalida();
-                
+
                 foreach (String e in Qs)
                 {
-                    if (buscarExitenciaEnSalida(e) ==false)
-                        dgvSalida.Rows.Add("q" + dgvSalida.Rows.Count, e, buscar0s(e), buscar1s(e));
+                    if (buscarExitenciaEnSalida(e) == false)
+                    {
+                        if (e.Equals("-") || e.Equals(""))
+                        {
+                            
+                        }
+                        else
+                        {
+              
+                            dgvSalida.Rows.Add("q" + dgvSalida.Rows.Count, e, buscar0s(e.TrimEnd(',').TrimStart(',').Replace(",,", ",")).Replace("-", ""), buscar1s(e.TrimEnd(',').TrimStart(',')).Replace("-", "").Replace(",,", ","));
+                        }
+
+
+                    }
+
                 }
+
+
+
                 contador--;
             } while (contador > 0);
 
