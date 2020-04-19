@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -73,23 +73,33 @@ namespace U3_AP34
         /*ZONA DE PROCESAMIENTO*/
         List<String> Qs = new List<string>();
 
+        private String eliminarComas(String e)
+        {
+            String resultado = e;
+            if (e.StartsWith(","))
+                resultado = resultado.Substring(1, e.Length-1);
+            if (e.EndsWith(","))
+                resultado = resultado.Substring(0, e.Length -2);//a,b,c,
+            return resultado;
+        }
+
         private String eliminarRepetidos(Char[] e)
         {
-            string nuevo = new String(e.Distinct().ToArray()).Replace(",", "");
+            string nuevo = new String(e.Distinct().ToArray());
+            nuevo = nuevo.Replace(",", "");
             String resultado = "";
             for (int i = 0; i < nuevo.Length; i++)
             {
                 resultado = resultado + "," + nuevo[i];
             }
-            resultado = resultado.TrimStart(',');
-            resultado = resultado.TrimEnd(',');
-            return resultado;
+            return eliminarComas(resultado);
         }
 
         private String buscar0s(String f)
         {
             String resultado = "";
             String[] auxE = f.Split(','); // se parte para revisar en la tabla de entrada
+            
             for (int i = 0; i < auxE.Length; i++)
             {
                 for (int j = 0; j < dgvEntrada.Rows.Count - 1; j++)
@@ -98,15 +108,14 @@ namespace U3_AP34
                         resultado = resultado + "," + dgvEntrada.Rows[j].Cells[1].Value.ToString();
                 }
             }
-            resultado = resultado.TrimStart(',');
-            resultado = resultado.TrimEnd(',');
-            return eliminarRepetidos(resultado.Trim(',').ToCharArray());
+            return eliminarRepetidos(resultado.Replace(",", "").ToCharArray());
         }
 
         private String buscar1s(String f)
         {
             String resultado = "";
             String[] auxE = f.Split(','); // se parte para revisar en la tabla de entrada
+            
             for (int i = 0; i < auxE.Length; i++)
             {
                 for (int j = 0; j < dgvEntrada.Rows.Count - 1; j++)
@@ -115,9 +124,7 @@ namespace U3_AP34
                         resultado = resultado + "," + dgvEntrada.Rows[j].Cells[2].Value.ToString();
                 }
             }
-            resultado = resultado.TrimStart(',');
-            resultado = resultado.TrimEnd(',');
-            return eliminarRepetidos(resultado.Trim(',').ToCharArray());
+            return eliminarRepetidos(resultado.Replace(",","").ToCharArray());
         }
 
         private void recogerSalida()
@@ -134,7 +141,7 @@ namespace U3_AP34
             bool resultado = false;
             for (int i = 0; i < dgvSalida.Rows.Count; i++)
             {
-                if (dgvSalida.Rows[i].Cells[1].Value.ToString().Equals(f))
+                if (dgvSalida.Rows[i].Cells[1].Value.ToString().Replace(",","").Replace(",,","").Equals(f.Replace(",","").Replace(",,",",")))
                 {
                     resultado = true;
                     break;
@@ -162,40 +169,17 @@ namespace U3_AP34
                         }
                         else
                         {
-              
-                            dgvSalida.Rows.Add("q" + dgvSalida.Rows.Count, e, buscar0s(formatearDatos(e)), buscar1s(formatearDatos(e)));
+                            dgvSalida.Rows.Add(
+                                "q" + dgvSalida.Rows.Count, 
+                                e.TrimEnd(',').TrimStart(',').Replace(",,",","), 
+                                buscar0s(e.TrimEnd(',').TrimStart(',')).Replace("-", ""), 
+                                buscar1s(e.TrimEnd(',').TrimStart(',')).Replace("-", "")
+                                );
                         }
-
-
                     }
-
                 }
-
-
-
                 contador--;
             } while (contador > 0);
-
-            //formatearSalida();
-        }
-
-        private String formatearDatos(String e)
-        {
-            String resultado = "";
-            if (e.EndsWith(","))
-            {
-                resultado = e.Remove(0, e.Length - 1);
-                MessageBox.Show(resultado);
-            }
-            else
-            {
-                if (e.StartsWith(","))
-                {
-                    resultado = e.Remove(0,1);
-                }
-            }
-            return resultado;
-            
 
         }
 
@@ -208,7 +192,6 @@ namespace U3_AP34
                 {
                     if (e.Cells[1].Value.ToString().Contains(finales[i]))
                         e.DefaultCellStyle.BackColor = Color.FromArgb(243, 156, 18);
-
                 }
             }
         }
