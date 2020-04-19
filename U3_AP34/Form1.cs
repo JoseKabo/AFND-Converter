@@ -188,6 +188,7 @@ namespace U3_AP34
                 {
                     if (e.Cells[1].Value.ToString().Contains(finales[i]))
                         e.DefaultCellStyle.BackColor = Color.FromArgb(243, 156, 18);
+
                 }
             }
         }
