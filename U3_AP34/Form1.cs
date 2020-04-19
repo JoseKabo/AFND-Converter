@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -72,6 +73,19 @@ namespace U3_AP34
         /*ZONA DE PROCESAMIENTO*/
         List<String> Qs = new List<string>();
 
+        private String eliminarRepetidos(Char[] e)
+        {
+            string nuevo = new String(e.Distinct().ToArray()).Replace(",","");
+            String resultado = "";
+            for (int i=0; i < nuevo.Length; i++)
+            {
+                resultado = resultado + "," + nuevo[i];
+            }
+            resultado = resultado.TrimStart(',');
+            resultado = resultado.TrimEnd(',');
+            return resultado;
+        }
+
         private String buscar0s(String f)
         {
             String resultado = "";
@@ -84,7 +98,9 @@ namespace U3_AP34
                         resultado = resultado + "," + dgvEntrada.Rows[j].Cells[1].Value.ToString();
                 }
             }
-            return resultado.TrimStart(',');
+            resultado = resultado.TrimStart(',');
+            resultado = resultado.TrimEnd(',');
+            return eliminarRepetidos(resultado.Trim(',').ToCharArray());
         }
 
         private String buscar1s(String f)
@@ -99,7 +115,9 @@ namespace U3_AP34
                         resultado = resultado + "," + dgvEntrada.Rows[j].Cells[2].Value.ToString();
                 }
             }
-            return resultado.TrimStart(',');
+            resultado = resultado.TrimStart(',');
+            resultado = resultado.TrimEnd(',');
+            return eliminarRepetidos(resultado.Trim(',').ToCharArray());
         }
 
         private void recogerSalida()
@@ -127,7 +145,6 @@ namespace U3_AP34
 
         private void procesarEntrada()
         {
-
             int contador = 5;
             dgvSalida.Rows.Add("q" + dgvSalida.Rows.Count, dgvEntrada.Rows[0].Cells[0].Value.ToString(), dgvEntrada.Rows[0].Cells[1].Value.ToString(), dgvEntrada.Rows[0].Cells[2].Value.ToString());
             do
@@ -142,6 +159,29 @@ namespace U3_AP34
                 }
                 contador--;
             } while (contador > 0);
+
+            //formatearSalida();
+        }
+
+        /*Metodos nuevos para estados finales*/
+        private void definirFinales(String[] finales)
+        {
+            for (int i = 0; i < finales.Length; i++)
+            {
+                foreach (DataGridViewRow e in dgvSalida.Rows)
+                {
+                    if (e.Cells[1].Value.ToString().Contains(finales[i]))
+                        e.DefaultCellStyle.BackColor = Color.FromArgb(243, 156, 18);
+                }
+            }
+        }
+
+        private void txtEF_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if ((char)Keys.Enter == e.KeyChar)
+            {
+                definirFinales(txtEF.Text.Split(','));
+            }
         }
     }
 }
